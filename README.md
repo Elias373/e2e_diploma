@@ -2,7 +2,7 @@
 
 > Automated UI testing for [SauceDemo](https://www.saucedemo.com/) - a demo e-commerce website
 
-## 🛠 Tech Stack
+### 🛠 Tech Stack
 
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Pytest](https://img.shields.io/badge/Pytest-0A9EDC?style=for-the-badge&logo=pytest&logoColor=white)
