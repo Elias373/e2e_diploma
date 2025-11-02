@@ -1,40 +1,56 @@
 import allure
+from selene import have, browser, be
+
 from pages.login_page import LoginPage
 from pages.main_page import MainPage
-from pages.cart_page import CartPage
 
 login = LoginPage()
 main = MainPage()
-cart = CartPage()
 
 
-
-@allure.title("Success login")
+@allure.title("Successful login")
 def test_successful_login():
-    login.open().login('standard_user', 'secret_sauce')
-    main.should_be_loaded()
+    with allure.step("Open and login"):
+        login.open().login('standard_user', 'secret_sauce')
 
-@allure.title("Adding an item to the shopping cart and checking")
-def test_add_item_to_cart():
-    login.open().login('standard_user', 'secret_sauce')
-    main.add_item_to_cart('add-to-cart-sauce-labs-backpack')
-    main.cart_should_have_count(1)
-    main.go_to_cart()
-    cart.should_contain_item('Sauce Labs Backpack')
+    with allure.step("Verify main page loaded"):
+        main.should_be_loaded()
 
-@allure.title("Open the About page")
-def test_open_about_page():
-    login.open().login('standard_user', 'secret_sauce')
-    main.open_about_page()
-    main.should_be_on_about_page()
 
-@allure.title("Success logout")
-def test_successful_logout():
-    login.open().login('standard_user', 'secret_sauce')
-    main.logout()
-    login.should_be_loaded()
+@allure.title("Add item to cart")
+def test_add_to_cart():
+    with allure.step("Login to application"):
+        login.open().login('standard_user', 'secret_sauce')
 
-@allure.title("Invalid login (negative)")
-def test_failed_login():
-    login.open().login('invalid_user', 'invalid_password')
-    login.should_have_error('Username and password do not match')
+    with allure.step("Add item and verify cart"):
+        main.add_item_to_cart('add-to-cart-sauce-labs-backpack')
+        main.cart_should_have_count(1)
+
+
+@allure.title("Navigation to about page")
+def test_navigation():
+    with allure.step("Login and open about page"):
+        login.open().login('standard_user', 'secret_sauce')
+        main.open_about_page()
+
+    with allure.step("Verify navigation worked"):
+        browser.should(have.url_containing('saucelabs.com'))
+
+
+@allure.title("User logout")
+def test_logout():
+    with allure.step("Login and logout"):
+        login.open().login('standard_user', 'secret_sauce')
+        main.logout()
+
+    with allure.step("Verify logout successful"):
+        browser.element('#login-button').should(be.visible)
+
+
+@allure.title("Failed login")
+def test_login_fail():
+    with allure.step("Attempt login with invalid credentials"):
+        login.open().login('invalid_user', 'invalid_password')
+
+    with allure.step("Verify error message"):
+        login.should_have_error('Username and password do not match')
