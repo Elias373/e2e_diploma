@@ -6,7 +6,8 @@ from pages.main_page import MainPage
 login = LoginPage()
 main = MainPage()
 
-@allure.feature ('Test Login')
+pytestmark = allure.epic("Test Login Screen")
+
 @allure.title("Successful Login")
 def test_successful_login(browser_setup):
     with allure.step("Open login page"):
@@ -16,7 +17,7 @@ def test_successful_login(browser_setup):
     with allure.step("Verify user is logged in"):
         main.should_be_loaded()
 
-allure.feature ('Test Login')
+
 @allure.title("Failed Login")
 def test_failed_login(browser_setup):
     with allure.step("Open login page"):
@@ -26,7 +27,7 @@ def test_failed_login(browser_setup):
     with allure.step("Verify error message is shown"):
         login.should_have_error('Epic sadface: Username and password do not match any user in this service')
 
-allure.feature ('Test Login')
+
 @allure.title("Logout")
 def test_logout(authorized_user):
     main = authorized_user

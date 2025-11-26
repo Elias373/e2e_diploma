@@ -4,7 +4,8 @@ from pages.cart_page import CartPage
 
 cart = CartPage()
 
-@allure.feature ('Test Cart')
+pytestmark = allure.epic("Test Cart")
+
 @allure.title("Add Item to Cart")
 def test_add_item_to_cart(authorized_user):
     main = authorized_user
@@ -17,7 +18,7 @@ def test_add_item_to_cart(authorized_user):
     with allure.step("Verify item count in cart"):
         cart.should_have_items_count(1)
 
-@allure.feature ('Test Cart')
+
 @allure.title("Remove Item from Cart")
 def test_remove_item_from_cart(authorized_user):
     main = authorized_user

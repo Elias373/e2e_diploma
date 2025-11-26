@@ -1,9 +1,8 @@
 import allure
 from selene import browser, have
 
+pytestmark = allure.epic("Test Site Navigation")
 
-
-@allure.feature ('Test Navigation')
 @allure.title("Navigation")
 def test_navigation(authorized_user):
     main = authorized_user
@@ -13,7 +12,6 @@ def test_navigation(authorized_user):
         browser.should(have.url_containing('saucelabs.com'))
 
 
-@allure.feature ('Test Navigation')
 @allure.title("Product Filtering")
 def test_product_filtering(authorized_user):
     main = authorized_user
