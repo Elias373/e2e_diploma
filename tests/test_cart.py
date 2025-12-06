@@ -1,18 +1,14 @@
 import allure
-import pytest
 from selene import browser, have
 from pages.main_page import MainPage
 from pages.cart_page import CartPage
-
-
-pytestmark = [
-    allure.feature("Cart")
-]
 
 main = MainPage()
 cart = CartPage()
 
 
+@allure.label("epic", "Cart")
+@allure.label("story", "Add to Cart")
 @allure.title("Add Item to Cart")
 def test_add_item_to_cart(authorized_user):
     with allure.step("Perform Login"):
@@ -27,6 +23,8 @@ def test_add_item_to_cart(authorized_user):
         cart.should_have_items_count(1)
 
 
+@allure.label("epic", "Cart")
+@allure.label("story", "Remove from Cart")
 @allure.title("Remove Item from Cart")
 def test_remove_item_from_cart(authorized_user):
     with allure.step("Perform Login"):
@@ -38,6 +36,7 @@ def test_remove_item_from_cart(authorized_user):
     with allure.step("Verify cart is empty"):
         cart.open_cart()
         cart.should_have_items_count(0)
+
 
 
 

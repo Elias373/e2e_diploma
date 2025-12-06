@@ -1,15 +1,10 @@
 import allure
-import pytest
 from selene import browser, have
 from pages.main_page import MainPage
 
-pytestmark = [
-    allure.feature("Navigation")
-]
 
-main = MainPage()
-
-
+@allure.label("epic", "Navigation")
+@allure.label("story", "Menu")
 @allure.title("Menu")
 def test_navigation(authorized_user):
     with allure.step("Perform Login"):
@@ -20,6 +15,8 @@ def test_navigation(authorized_user):
         browser.should(have.url_containing('saucelabs.com'))
 
 
+@allure.label("epic", "Navigation")
+@allure.label("story", "Product Filtering")
 @allure.title("Product Filtering")
 def test_product_filtering(authorized_user):
     with allure.step("Perform Login"):

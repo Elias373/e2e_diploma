@@ -1,17 +1,14 @@
 import allure
-import pytest
 from selene import browser, have, be
 from pages.login_page import LoginPage
 from pages.main_page import MainPage
-
-pytestmark = [
-    allure.feature("Authentication")
-]
 
 login = LoginPage()
 main = MainPage()
 
 
+@allure.label("epic", "Authentication")
+@allure.label("story", "Login")
 @allure.title("Successful Login")
 def test_successful_login(browser_setup):
     with allure.step("Open login page"):
@@ -22,6 +19,8 @@ def test_successful_login(browser_setup):
         main.should_be_loaded()
 
 
+@allure.label("epic", "Authentication")
+@allure.label("story", "Login")
 @allure.title("Failed Login")
 def test_failed_login(browser_setup):
     with allure.step("Open login page"):
@@ -32,6 +31,8 @@ def test_failed_login(browser_setup):
         login.should_have_error('Epic sadface: Username and password do not match any user in this service')
 
 
+@allure.label("epic", "Authentication")
+@allure.label("story", "Logout")
 @allure.title("Logout")
 def test_logout(authorized_user):
     with allure.step("Perform Login"):
