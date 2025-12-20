@@ -13,8 +13,6 @@ class MenuPage:
         browser.element('.bm-menu-wrap').should(be.not_.visible)
         return self
 
-    def is_menu_closed(self):
-        return browser.element('.bm-menu-wrap').matching(be.not_.visible)
 
 
     def should_have_items(self, *expected_items):
