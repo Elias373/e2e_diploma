@@ -1,9 +1,9 @@
+import os
 import pytest
 from selene import browser
 from selenium import webdriver
 from dotenv import load_dotenv
-import os
-from utils import attach
+from utils.attach import add_screenshot, add_logs, add_html, add_video
 
 
 @pytest.fixture(scope='session', autouse=True)
@@ -13,15 +13,24 @@ def load_env():
 
 @pytest.fixture(scope='function')
 def browser_setup():
-    browser.config.base_url = 'https://www.saucedemo.com'
-    browser.config.window_width = 1920
-    browser.config.window_height = 1080
-    browser.config.timeout = 10.0
+    browser.config.base_url = os.environ['BASE_URL']
+    browser.config.window_width = int(os.environ['WINDOW_WIDTH'])
+    browser.config.window_height = int(os.environ['WINDOW_HEIGHT'])
+    browser.config.timeout = float(os.environ['TIMEOUT'])
 
-    selenoid_login = os.getenv('SELENOID_LOGIN', 'user1')
-    selenoid_password = os.getenv('SELENOID_PASSWORD', '1234')
 
-    options = webdriver.ChromeOptions()
+    selenoid_login = os.environ['SELENOID_LOGIN']
+    selenoid_password = os.environ['SELENOID_PASSWORD']
+
+
+    browser_name = os.environ['BROWSER_NAME']
+    browser_version = os.environ['BROWSER_VERSION']
+    enable_vnc = os.environ['ENABLE_VNC'].lower() == 'true'
+    enable_video = os.environ['ENABLE_VIDEO'].lower() == 'true'
+
+
+    options = webdriver.ChromeOptions() if browser_name == 'chrome' else webdriver.FirefoxOptions()
+
 
     options.set_capability('goog:loggingPrefs', {
         'browser': 'ALL',
@@ -30,11 +39,11 @@ def browser_setup():
     })
 
 
-    options.set_capability("browserName", "chrome")
-    options.set_capability("browserVersion", "128.0")
+    options.set_capability("browserName", browser_name)
+    options.set_capability("browserVersion", browser_version)
     options.set_capability("selenoid:options", {
-        "enableVNC": True,
-        "enableVideo": True
+        "enableVNC": enable_vnc,
+        "enableVideo": enable_video
     })
 
 
@@ -47,20 +56,25 @@ def browser_setup():
 
     yield
 
-    attach.add_screenshot(browser)
-    attach.add_logs(browser)
-    attach.add_html(browser)
-    attach.add_video(browser)
+
+    add_screenshot(browser)
+    add_logs(browser)
+    add_html(browser)
+    add_video(browser)
 
     browser.quit()
 
 
-
 @pytest.fixture
 def logged_in_main_page(browser_setup):
+
     from pages.login_page import LoginPage
     from pages.main_page import MainPage
 
+    username = os.environ['VALID_USERNAME']
+    password = os.environ['VALID_PASSWORD']
+
     login_page = LoginPage()
-    login_page.open().login('standard_user', 'secret_sauce')
+    login_page.open().login(username, password)
+
     return MainPage()

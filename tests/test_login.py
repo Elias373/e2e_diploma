@@ -1,7 +1,7 @@
 import allure
-from selene import be
+from selene import browser, be
 from pages.login_page import LoginPage
-
+from pages.menu_page import MenuPage
 
 
 @allure.suite("Authentication")
@@ -30,11 +30,11 @@ class TestLogin:
                 'Epic sadface: Username and password do not match any user in this service'
             )
 
+
     @allure.title("Logout")
     def test_logout(self, logged_in_main_page):
         with allure.step("Perform logout"):
-            logged_in_main_page.logout()
+            MenuPage().logout()
         with allure.step("Verify user is logged out"):
-            from selene import browser
             browser.element('#login-button').should(be.visible)
 

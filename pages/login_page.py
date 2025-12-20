@@ -3,7 +3,7 @@ from selene import browser, have
 
 class LoginPage:
     def open(self):
-        browser.open('https://www.saucedemo.com/')
+        browser.open('/')
         return self
 
     def login(self, username, password):
